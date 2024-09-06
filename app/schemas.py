@@ -8,8 +8,10 @@ class ValidationError(BaseModel):
     msg: str
     type: str
 
+
 class RequestModel(BaseModel):
     query: str
+
 
 class ResponseModel(BaseModel):
     text: str

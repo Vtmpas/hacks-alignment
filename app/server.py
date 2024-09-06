@@ -1,7 +1,9 @@
 # server.py
-import litserve as ls
 from typing import Union
-from app.schemas import ValidationError, ResponseModel
+
+import litserve as ls
+
+from app.schemas import ResponseModel, ValidationError
 
 
 class SimpleLitAPI(ls.LitAPI):
