@@ -120,8 +120,6 @@
     "num_train_epochs": 3,
     "lr_scheduler_type": "linear",
     "warmup_ratio": 0.3,
-    "fp16": true,
-    "bf16": false,
     "optim": "adamw_torch",
     "adam_beta1": 0.9,
     "adam_beta2": 0.98,
