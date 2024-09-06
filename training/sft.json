@@ -103,7 +103,6 @@
     ]
   },
   "tokenizer_settings": {},
-  "special_tokens_settings": {},
   "trainer_settings": {
     "evaluation_strategy": "steps",
     "save_total_limit": 5,
