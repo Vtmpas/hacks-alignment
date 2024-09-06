@@ -27,8 +27,7 @@ def configure_environment():
 
 # Run the original command
 if __name__ == '__main__':
-    with configure_environment():
-        subprocess.run([
-            "poetry", "run", "python", "-m", "turbo_alignment", "train_sft",
-            "--experiment_settings_path", "training/sft.json"
-        ])
+    torch.backends.cuda.enable_mem_efficient_sdp(False)
+    torch.backends.cuda.enable_flash_sdp(False)
+    launch_code = "poetry run python -m turbo_alignment train_sft --experiment_settings_path training/sft.json"
+    subprocess.run(launch_code, shell=True)
