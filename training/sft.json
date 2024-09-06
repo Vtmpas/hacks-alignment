@@ -45,6 +45,19 @@
       "model_path": "google/gemma-2-2b-it",
       "model_type": "causal",
       "transformers_settings": {},
+      "peft_settings": {
+        "r": 16,
+        "lora_alpha": 16,
+        "lora_dropout": 0.05,
+        "target_modules": [
+          "q_proj",
+          "v_proj",
+          "k_proj",
+          "o_proj"
+        ],
+        "task_type": "CAUSAL_LM",
+        "name": "LORA"
+      },
       "model_kwargs": {
       "attn_implementation": "eager"
       }
@@ -103,6 +116,7 @@
       "fp16": false,
       "bf16": false,
       "optim": "adamw_torch",
+      "deepspeed": "configs/deepspeed_stage2.json",
       "adam_beta1": 0.9,
       "adam_beta2": 0.98,
       "adam_epsilon": 1e-6,
