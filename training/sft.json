@@ -4,7 +4,7 @@
       {
         "name": "train",
         "records_path": "training/train_results.jsonl",
-        "num_samples": 300
+        "num_samples": 360
       }
     ],
     "prompt_template": {
@@ -13,8 +13,8 @@
         "user": "user",
         "system": "system"
       },
-      "prefix_template": "<|{role}|>\n",
-      "suffix_template": "<|end|>"
+      "prefix_template": "<|start_header_id|>{role}<|end_header_id|>\n\n",
+      "suffix_template": "<|eot_id|>"
     },
     "dataset_type": "chat",
     "max_tokens_count": 2000,
@@ -25,7 +25,7 @@
       {
         "name": "test",
         "records_path": "training/test_results.jsonl",
-        "num_samples": 10
+        "num_samples": 60
       }
     ],
     "prompt_template": {
@@ -34,15 +34,15 @@
         "user": "user",
         "system": "system"
       },
-      "prefix_template": "<|{role}|>\n",
-      "suffix_template": "<|end|>"
+      "prefix_template": "<|start_header_id|>{role}<|end_header_id|>\n\n",
+      "suffix_template": "<|eot_id|>"
     },
     "dataset_type": "chat",
     "max_tokens_count": 2000,
     "only_answer_loss": true
   },
   "model_settings": {
-    "model_path": "google/gemma-2-2b-it",
+    "model_path": "AnatoliiPotapov/T-lite-instruct-0.1",
     "model_type": "causal",
     "transformers_settings": {},
     "peft_settings": {
@@ -59,16 +59,17 @@
       "name": "LORA"
     },
     "model_kwargs": {
-      "attn_implementation": "eager"
+      "attn_implementation": "flash_attention_2"
     }
   },
   "cherry_pick_settings": {
     "generator_transformers_settings": {
       "num_beams": 3,
-      "max_new_tokens": 16,
-      "repetition_penalty": 1.1
+      "max_new_tokens": 512,
+      "repetition_penalty": 1.02
     },
     "custom_generation_settings": {
+      "generation_eos_token": "<|eot_id|>",
       "skip_special_tokens": false
     },
     "dataset_settings": {
@@ -76,7 +77,7 @@
         {
           "name": "test",
           "records_path": "training/test_results.jsonl",
-          "num_samples": 3
+          "num_samples": 10
         }
       ],
       "prompt_template": {
@@ -85,14 +86,13 @@
           "user": "user",
           "system": "system"
         },
-        "prefix_template": "<|{role}|>\n",
-        "suffix_template": "<|end|>"
+        "prefix_template": "<|start_header_id|>{role}<|end_header_id|>\n\n",
+        "suffix_template": "<|eot_id|>"
       },
       "dataset_type": "chat",
       "max_tokens_count": 2000,
-      "random_cut": false,
-      "only_answer_loss": true,
-      "keep_end": true
+      "random_cut": true,
+      "only_answer_loss": true
     },
     "metric_settings": [
       {
@@ -104,6 +104,10 @@
     ]
   },
   "tokenizer_settings": {},
+  "special_tokens_settings": {
+    "bos_token": "<|begin_of_text|>",
+    "eos_token": "<|end_of_text|>"
+  },
   "trainer_settings": {
     "evaluation_strategy": "steps",
     "save_total_limit": 5,
@@ -115,17 +119,18 @@
     "eval_steps": 1,
     "save_steps": 8,
     "learning_rate": 0.00004,
-    "num_train_epochs": 5,
+    "num_train_epochs": 3,
     "lr_scheduler_type": "linear",
     "warmup_ratio": 0.3,
     "fp16": false,
-    "bf16": false,
+    "bf16": true,
     "optim": "adamw_torch",
     "adam_beta1": 0.9,
     "adam_beta2": 0.98,
     "adam_epsilon": 1e-6,
     "weight_decay": 0.01,
-    "max_grad_norm": 0.11
+    "max_grad_norm": 0.11,
+    "deepspeed": "deepspeed_stage2.json"
   },
   "wandb_settings": {
     "project_name": "alignment",
