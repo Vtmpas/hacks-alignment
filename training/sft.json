@@ -44,11 +44,12 @@
   "model_settings": {
     "model_path": "AnatoliiPotapov/T-lite-instruct-0.1",
     "model_type": "causal",
-    "transformers_settings": {},
+    "transformers_settings": {
+      "low_cpu_mem_usage": true
+    },
     "model_kwargs": {
         "attn_implementation": "eager",
-        "device_map": "auto",
-        "low_cpu_mem_usage": true
+        "device_map": "auto"
     },
     "peft_settings": {
       "r": 8,
