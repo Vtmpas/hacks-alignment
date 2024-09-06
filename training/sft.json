@@ -44,6 +44,7 @@
   "model_settings": {
     "model_path": "AnatoliiPotapov/T-lite-instruct-0.1",
     "model_type": "causal",
+    "torch_dtype": "float16",
     "transformers_settings": {
       "low_cpu_mem_usage": true
     },
@@ -52,7 +53,6 @@
         "device_map": "auto"
     },
     "peft_settings": {
-      "torch_dtype": "float16",
       "r": 8,
       "lora_alpha": 16,
       "lora_dropout": 0.05,
