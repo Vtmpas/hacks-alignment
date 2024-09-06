@@ -123,8 +123,7 @@
     "adam_beta2": 0.98,
     "adam_epsilon": 1e-6,
     "weight_decay": 0.01,
-    "max_grad_norm": 0.11,
-    "deepspeed": "deepspeed_stage2.json"
+    "max_grad_norm": 0.11
   },
   "wandb_settings": {
     "project_name": "alignment",
