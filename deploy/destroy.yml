@@ -1,0 +1,33 @@
+- name: destroy container on remote server
+  hosts: vm_host
+  tasks:
+    - name: create workdir
+      file:
+        path: '{{ workdir }}'
+        state: directory
+        owner: '{{ ansible_user }}'
+      tags: [ 'prepare' ]
+
+    - name: create pull script
+      template:
+        dest: '{{ workdir }}/destroy.sh'
+        src: 'templates/destroy.sh'
+        mode: 0755
+      tags: [ 'prepare' ]
+
+    - name: create clean script
+      template:
+        dest: '{{ workdir }}/clean.sh'
+        src: 'templates/clean.sh'
+        mode: 0755
+      tags: [ 'prepare' ]
+
+    - name: stop and remove existing container
+      command: '{{ workdir }}/destroy.sh'
+      ignore_errors: true
+      tags: [ 'deploy' ]
+
+    - name: clean docker images and containers
+      command: '{{ workdir }}/clean.sh'
+      ignore_errors: true
+      tags: [ 'deploy' ]
