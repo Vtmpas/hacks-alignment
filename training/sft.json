@@ -46,7 +46,7 @@
     "model_type": "causal",
     "transformers_settings": {},
     "peft_settings": {
-      "r": 16,
+      "r": 8,
       "lora_alpha": 16,
       "lora_dropout": 0.05,
       "target_modules": [
@@ -126,7 +126,6 @@
     "adam_epsilon": 1e-6,
     "weight_decay": 0.01,
     "max_grad_norm": 0.11,
-    "deepspeed": "deepspeed_stage2.json"
   },
   "wandb_settings": {
     "project_name": "alignment",
