@@ -42,7 +42,7 @@
       "only_answer_loss": true
     },
     "model_settings": {
-      "model_path": "ai-forever/rugpt3small_based_on_gpt2",
+      "model_path": "google/gemma-2-2b-it",
       "model_type": "causal",
       "transformers_settings": {}
     },
