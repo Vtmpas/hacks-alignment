@@ -12,6 +12,7 @@ readme = "README.md"
 python = "3.10.*"
 litserve = "^0.2.2"
 requests = "^2.32.3"
+pre-commit = "^3.8.0"
 
 
 [tool.poetry.group.dev.dependencies]
