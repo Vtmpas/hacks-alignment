@@ -57,8 +57,6 @@
       ],
       "task_type": "CAUSAL_LM",
       "name": "LORA"
-    },
-    "model_kwargs": {
     }
   },
   "cherry_pick_settings": {
