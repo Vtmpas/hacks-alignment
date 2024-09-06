@@ -33,10 +33,3 @@ repos:
         pass_filenames: false
         always_run: true
         description: "Build docker image using Makefile"
-      - id: environment
-        name: Pip environment
-        entry: bash -c 'make environment'
-        language: system
-        pass_filenames: false
-        always_run: true
-        description: "Create conda environment using Makefile"

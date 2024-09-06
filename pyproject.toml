@@ -9,17 +9,21 @@ authors = [
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.10.*"
+python = ">=3.10,<3.11"
+
+[tool.poetry.group.app.dependencies]
 litserve = "^0.2.2"
 requests = "^2.32.3"
-pre-commit = "^3.8.0"
 
+[tool.poetry.group.bot.dependencies]
+aiogram = "^3.12.0"
+pydantic-settings = "^2.4.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.8.0"
 ruff = "^0.6.4"
 mypy = "^1.11.2"
-
+ansible = "^10.3.0"
 
 [build-system]
 requires = ["poetry-core"]

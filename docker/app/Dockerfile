@@ -14,9 +14,9 @@ ENV PYTHONUNBUFFERED 1
 # Установка питонячьих библиотек
 COPY poetry.lock pyproject.toml /
 RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi
+    poetry install --no-interaction --no-ansi --with main,app
 
 # Копирование в контейнер папок и файлов.
-COPY . .
+COPY app app
 
 ENTRYPOINT ["python", "app/server.py"]

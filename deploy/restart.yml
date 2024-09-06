@@ -1,0 +1,21 @@
+- name: restart specific compose container on remote server
+  hosts: vm_host
+  tasks:
+    - name: create workdir
+      file:
+        path: '{{ workdir }}'
+        state: directory
+        owner: '{{ ansible_user }}'
+      tags: [ 'prepare' ]
+
+    - name: create restart script
+      template:
+        dest: '{{ workdir }}/restart.sh'
+        src: 'templates/destroy.sh'
+        mode: 0755
+      tags: [ 'prepare' ]
+
+    - name: restart specific compose container
+      command: '{{ workdir }}/restart.sh'
+      ignore_errors: true
+      tags: [ 'deploy' ]

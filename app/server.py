@@ -2,8 +2,7 @@
 from typing import Union
 
 import litserve as ls
-
-from app.schemas import ResponseModel, ValidationError
+from schemas import ResponseModel, ValidationError
 
 
 class SimpleLitAPI(ls.LitAPI):

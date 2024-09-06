@@ -4,7 +4,7 @@
 POETRY := poetry
 PYTHON := python
 
-.PHONY: install update test install-test-deps lint format clean environment build
+.PHONY: install update test install-test-deps lint format clean environment build deploy destroy restart
 
 install:
 	$(POETRY) install
@@ -38,8 +38,18 @@ clean:
 	# Удаление файлов логов
 	find . -type f -name "*.log" -exec rm -f {} +
 
-environment:
-	$(POETRY) export -f requirements.txt --output requirements.txt --without dev --without-hashes
-
 build:
-	docker build -t hacks-alignment .
+	docker login -u konductor14 -p $(DOCKER_REGISTRY_PASSWORD)
+	docker build -f docker/app/Dockerfile -t konductor14/hacks-alignment-app:latest .
+	docker build -f docker/bot/Dockerfile -t konductor14/hacks-alignment-bot:latest .
+	docker push konductor14/hacks-alignment-app:latest
+	docker push konductor14/hacks-alignment-bot:latest
+
+deploy:
+	ansible-playbook -i deploy/inventory.ini deploy/deploy.yml
+
+destroy:
+	ansible-playbook -i deploy/inventory.ini deploy/destroy.yml
+
+restart:
+	ansible-playbook -i deploy/inventory.ini deploy/restart.yml
