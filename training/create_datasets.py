@@ -68,7 +68,7 @@ class DialogueResponse(BaseModel):
     dialogue: List[FullResponse] = Field(..., description="Full dialogue according to schemas")
 
 # Initialize OpenAI client
-client = OpenAI(api_key='sk-proj-7k9awwW54lHsonHXDRNQT3BlbkFJbMuWCigNX0GyUhszMT8r')
+client = OpenAI(api_key='')
 
 
 def parse_to_list_of_dicts_general(text):
