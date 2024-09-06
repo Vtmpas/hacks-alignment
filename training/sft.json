@@ -121,7 +121,9 @@
     "fp16": false,
     "bf16": false,
     "optim": "adamw_torch",
-    "deepspeed": "configs/deepspeed/deepspeed_stage2.json",
+    "deepspeed": {
+      "train_micro_batch_size_per_gpu": "auto"
+    },
     "adam_beta1": 0.9,
     "adam_beta2": 0.98,
     "adam_epsilon": 1e-6,
