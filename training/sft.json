@@ -45,12 +45,12 @@
     "model_path": "AnatoliiPotapov/T-lite-instruct-0.1",
     "model_type": "causal",
     "transformers_settings": {
-      "low_cpu_mem_usage": true,
-      "torch_dtype": "float16"
+      "low_cpu_mem_usage": true
     },
     "model_kwargs": {
         "attn_implementation": "eager",
-        "device_map": "auto"
+        "device_map": "auto",
+      "torch_dtype": "float16"
     },
     "peft_settings": {
       "r": 8,
