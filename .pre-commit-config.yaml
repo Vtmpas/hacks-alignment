@@ -1,0 +1,42 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: trailing-whitespace  # Удаляет лишние пробелы в конце строк
+      - id: end-of-file-fixer    # Добавляет пустую строку в конце файла, если её нет
+      - id: check-yaml           # Проверяет синтаксис YAML-файлов
+      - id: check-added-large-files  # Проверяет добавление крупных файлов в коммит
+
+  - repo: local
+    hooks:
+      - id: format
+        name: Format Code
+        entry: bash -c 'make format'
+        language: system
+        pass_filenames: false
+        always_run: true
+        description: "Format code using Makefile"
+      - id: lint
+        name: Lint Code
+        entry: bash -c 'make lint'
+        language: system
+        pass_filenames: false
+        always_run: true
+        description: "Run linters using Makefile"
+      - id: build
+        name: Docker build
+        entry: bash -c 'make build'
+        language: system
+        pass_filenames: false
+        always_run: true
+        description: "Build docker image using Makefile"
+      - id: environment
+        name: Pip environment
+        entry: bash -c 'make environment'
+        language: system
+        pass_filenames: false
+        always_run: true
+        description: "Create conda environment using Makefile"
