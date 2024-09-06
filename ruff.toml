@@ -1,0 +1,40 @@
+line-length = 120
+
+extend-exclude = [
+  "stubs",
+  "*pb2*",
+  ".git",
+  "__pycache__",
+  "build",
+  "dist",
+  "__init__.py",
+]
+
+[lint]
+select = ["N", "B", "A", "E", "W", "F", "ASYNC", "S", "D", "I"]
+ignore = [
+  "PT001",
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D107",
+  "D104",
+  "W293",
+  "S101",
+  "D212",
+  "D200",
+  "UP007",
+  "S105",
+  "S311",
+  "S106",
+]
+
+[lint.mccabe]
+max-complexity = 10
+
+[lint.pydocstyle]
+convention = "google"
+
+[lint.flake8-builtins]
+builtins-ignorelist = ["id"]
