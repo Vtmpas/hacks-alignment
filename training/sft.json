@@ -46,7 +46,8 @@
     "model_type": "causal",
     "transformers_settings": {},
     "model_kwargs": {
-        "attn_implementation": "eager"
+        "attn_implementation": "eager",
+        "device_map": "auto"
     },
     "peft_settings": {
       "r": 8,
@@ -124,8 +125,7 @@
     "adam_beta2": 0.98,
     "adam_epsilon": 1e-6,
     "weight_decay": 0.01,
-    "max_grad_norm": 0.11,
-    "deepspeed": "deepspeed_stage2.json"
+    "max_grad_norm": 0.11
   },
   "wandb_settings": {
     "project_name": "alignment",
