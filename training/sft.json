@@ -69,7 +69,6 @@
       "repetition_penalty": 1.02
     },
     "custom_generation_settings": {
-      "generation_eos_token": "<|eot_id|>",
       "skip_special_tokens": false
     },
     "dataset_settings": {
