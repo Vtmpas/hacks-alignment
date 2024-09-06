@@ -104,10 +104,7 @@
     ]
   },
   "tokenizer_settings": {},
-  "special_tokens_settings": {
-    "bos_token": "<|begin_of_text|>",
-    "eos_token": "<|end_of_text|>"
-  },
+  "special_tokens_settings": {},
   "trainer_settings": {
     "evaluation_strategy": "steps",
     "save_total_limit": 5,
