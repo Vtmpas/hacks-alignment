@@ -62,12 +62,6 @@
       "attn_implementation": "eager"
     }
   },
-  "special_tokens_settings": {
-    "pad_token": "<|pad|>",
-    "eos_token": "<|end|>",
-    "bos_token": "<|start|>",
-    "unk_token": "<|unk|>"
-  },
   "cherry_pick_settings": {
     "generator_transformers_settings": {
       "num_beams": 3,
