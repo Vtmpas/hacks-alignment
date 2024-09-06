@@ -44,7 +44,10 @@
     "model_settings": {
       "model_path": "google/gemma-2-2b-it",
       "model_type": "causal",
-      "transformers_settings": {}
+      "transformers_settings": {},
+      "model_kwargs": {
+      "attn_implementation": "eager"
+      }
     },
     "cherry_pick_settings": {
   "generator_transformers_settings": {
