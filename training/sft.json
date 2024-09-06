@@ -45,6 +45,9 @@
     "model_path": "AnatoliiPotapov/T-lite-instruct-0.1",
     "model_type": "causal",
     "transformers_settings": {},
+    "model_kwargs": {
+        "attn_implementation": "eager"
+    },
     "peft_settings": {
       "r": 8,
       "lora_alpha": 16,
