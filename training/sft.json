@@ -59,7 +59,6 @@
       "name": "LORA"
     },
     "model_kwargs": {
-      "attn_implementation": "flash_attention_2"
     }
   },
   "cherry_pick_settings": {
