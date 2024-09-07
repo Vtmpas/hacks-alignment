@@ -4,6 +4,9 @@ import json
 import litserve as ls
 from fastapi import HTTPException
 from huggingface_hub import snapshot_download
+
+from transformers import AutoTokenizer
+
 from pydantic import ValidationError as PydanticValidationError
 from schemas import PredictOutputModel, RequestModel, ResponseModel, ValidationError
 from vllm import LLM, SamplingParams
@@ -14,8 +17,10 @@ class SimpleLitAPI(ls.LitAPI):
     sampling_params: SamplingParams
     lora: LoRARequest
     llm: LLM
+    tokenizer: AutoTokenizer
 
     def setup(self, device):
+        self.tokenizer = AutoTokenizer.from_pretrained("AnatoliiPotapov/T-lite-instruct-0.1")
         self.lora = LoRARequest(
             lora_name="sft",
             lora_int_id=1,
@@ -32,7 +37,6 @@ class SimpleLitAPI(ls.LitAPI):
         self.llm = LLM(
             model="AnatoliiPotapov/T-lite-instruct-0.1",
             enable_lora=True,
-            dtype="half",
             tensor_parallel_size=4,
         )
 
@@ -40,6 +44,11 @@ class SimpleLitAPI(ls.LitAPI):
         return request.query
 
     def predict(self, prompt: str, **kwargs) -> PredictOutputModel:
+        prompt = self.tokenizer.apply_chat_template(
+            [{'role': 'user', 'content': prompt}],
+            tokenize=False,
+            add_generation_prompt=True
+        )
         response = self.llm.generate(
             prompts=[prompt],
             sampling_params=self.sampling_params,
