@@ -1,10 +1,20 @@
 services:
   app:
     image: konductor14/hacks-alignment-app:latest
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0', '1', '2', '3']
+              capabilities: [ gpu ]
     ports:
       - 8000:8081
+    shm_size: "64gb"
     runtime: nvidia
     restart: always
+    environment:
+      - NCCL_SHM_DISABLE=1
   bot:
     image: konductor14/hacks-alignment-bot:latest
     restart: always
