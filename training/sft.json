@@ -52,8 +52,8 @@
         "device_map": "auto"
     },
     "peft_settings": {
-      "r": 4,
-      "lora_alpha": 8,
+      "r": 8,
+      "lora_alpha": 16,
       "lora_dropout": 0.05,
       "target_modules": [
         "q_proj",
@@ -67,8 +67,8 @@
   },
   "cherry_pick_settings": {
     "generator_transformers_settings": {
-      "num_beams": 3,
-      "max_new_tokens": 512,
+      "num_beams": 2,
+      "max_new_tokens": 128,
       "repetition_penalty": 1.02
     },
     "custom_generation_settings": {
@@ -79,7 +79,7 @@
         {
           "name": "test",
           "records_path": "training/test_results.jsonl",
-          "num_samples": 10
+          "num_samples": 3
         }
       ],
       "prompt_template": {
@@ -120,14 +120,14 @@
     "save_steps": 8,
     "learning_rate": 0.00004,
     "num_train_epochs": 3,
-    "lr_scheduler_type": "linear",
+    "lr_scheduler_type": "cosine",
     "warmup_ratio": 0.3,
     "optim": "adamw_torch",
     "adam_beta1": 0.9,
     "adam_beta2": 0.98,
     "adam_epsilon": 1e-6,
     "weight_decay": 0.01,
-    "max_grad_norm": 0.11
+    "max_grad_norm": 0.5
   },
   "wandb_settings": {
     "project_name": "alignment",
