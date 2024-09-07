@@ -2,7 +2,7 @@ services:
   app:
     image: konductor14/hacks-alignment-app:latest
     ports:
-      - 8000:8000
+      - 8000:8081
     restart: always
   bot:
     image: konductor14/hacks-alignment-bot:latest
