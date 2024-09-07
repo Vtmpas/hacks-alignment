@@ -52,8 +52,8 @@
         "device_map": "auto"
     },
     "peft_settings": {
-      "r": 8,
-      "lora_alpha": 16,
+      "r": 4,
+      "lora_alpha": 8,
       "lora_dropout": 0.05,
       "target_modules": [
         "q_proj",
