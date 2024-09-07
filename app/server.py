@@ -1,22 +1,23 @@
 # server.py
-from typing import Union
+import time
 
 import litserve as ls
-from schemas import ResponseModel, ValidationError
+from schemas import DummyModelOutput, PredictOutputModel, RequestModel, ResponseModel
 
 
 class SimpleLitAPI(ls.LitAPI):
     def setup(self, device):
-        self.llm = lambda x: ResponseModel(text="dummy")
+        self.model = lambda x: DummyModelOutput
 
-    def decode_request(self, request, **kwargs):
-        return request["input"]
+    def decode_request(self, request: RequestModel, **kwargs) -> str:
+        return request.query
 
-    def predict(self, x, **kwargs) -> Union[ResponseModel, ValidationError]:
-        return self.llm(x)
+    def predict(self, x: str, **kwargs) -> PredictOutputModel:
+        time.sleep(1)
+        return self.model(x)
 
-    def encode_response(self, output, **kwargs):
-        return {"output": output}
+    def encode_response(self, output: PredictOutputModel, **kwargs) -> ResponseModel:
+        return ResponseModel(text=str(output))
 
 
 if __name__ == "__main__":

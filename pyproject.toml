@@ -10,14 +10,15 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
+requests = "^2.32.3"
 
 [tool.poetry.group.app.dependencies]
 litserve = "^0.2.2"
-requests = "^2.32.3"
 
 [tool.poetry.group.bot.dependencies]
 aiogram = "^3.12.0"
 pydantic-settings = "^2.4.0"
+loguru = "^0.7.2"
 
 [tool.poetry.group.training.dependencies]
 openai = "^1.44.0"
@@ -25,6 +26,7 @@ datasets = "^2.21.0"
 tqdm = "^4.66.5"
 scikit-learn = "^1.5.1"
 turbo-alignment = "^0.0.3"
+deepspeed = "^0.15.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.8.0"
