@@ -45,17 +45,12 @@
     "model_path": "model_fp16",
     "model_type": "causal",
     "transformers_settings": {
-      "low_cpu_mem_usage": true,
-      "use_cache": true
+      "low_cpu_mem_usage": true
     },
     "model_kwargs": {
         "attn_implementation": "eager",
-        "device_map": "auto"
-    },
-    "peft_settings": {
-    "task_type": "CAUSAL_LM",
-    "name": "P_TUNING",
-    "num_virtual_tokens": 32
+        "device_map": "auto",
+        "use_cache": true
     }
   },
   "cherry_pick_settings": {
