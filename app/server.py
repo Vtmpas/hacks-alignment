@@ -19,7 +19,10 @@ class SimpleLitAPI(ls.LitAPI):
         self.lora = LoRARequest(
             lora_name="sft",
             lora_int_id=1,
-            lora_path=snapshot_download(repo_id="yard1/llama-2-7b-sql-lora-test"),
+            lora_path=snapshot_download(
+                repo_id="Vtmpas/hack-ada-lora",
+                token="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",
+            ),
         )
         self.sampling_params = SamplingParams(
             temperature=0,
@@ -34,6 +37,7 @@ class SimpleLitAPI(ls.LitAPI):
         response = self.llm.generate(
             prompts=[prompt],
             sampling_params=self.sampling_params,
+            lora_request=self.lora,
         )
 
         output = response[0].outputs[0].text
