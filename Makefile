@@ -45,11 +45,30 @@ build:
 	docker push konductor14/hacks-alignment-app:latest
 	docker push konductor14/hacks-alignment-bot:latest
 
+# Сервер
+INVENTORY=
+ifeq ($(evn), test)
+	INVENTORY=deploy/test.ini
+else ifeq ($(evn), prod)
+	INVENTORY=deploy/prod.ini
+else
+	INVENTORY=deploy/test.ini
+endif
+
 deploy:
-	ansible-playbook -i deploy/inventory.ini deploy/deploy.yml
+	@echo "Using $(INVENTORY)"
+	ansible-playbook -i $(INVENTORY) deploy/deploy.yml -e ENVIRON=$(INVENTORY)
 
 destroy:
-	ansible-playbook -i deploy/inventory.ini deploy/destroy.yml
+	@echo "Using $(INVENTORY)"
+	ansible-playbook -i $(INVENTORY) deploy/destroy.yml
 
 restart:
-	ansible-playbook -i deploy/inventory.ini deploy/restart.yml
+	@echo "Using $(INVENTORY)"
+	ansible-playbook -i $(INVENTORY) deploy/restart.yml
+
+%:
+	@if [ "$(origin CMD)" = "undefined" ]; then \
+		$(error Unknown command. Use 'deploy' or 'destroy' or 'restart'); \
+	fi
+	@$(MAKE) env=$@ $(CMD)

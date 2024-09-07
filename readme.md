@@ -3,6 +3,7 @@
 В представленном архиве вы можете увидеть следующие папки и файлы
 
 1. Файл **openapi.yaml** --- openapi контракт для развертывания модели с целью обращения к ней по API. Обратим внимание, что текст ответа модели должен представлять собой строку следующего формата:
+```
     {
         "thoughts": {
             "text": "thought",
@@ -18,7 +19,7 @@
             }
         }
     }
-
+```
 ***
 
 ##### Вашей задачей будет произведение alignment'а большой языковой модели Т-Банка T-lite.
@@ -80,6 +81,7 @@ Performance Evaluation:
 
 You should only respond in JSON format as described below
 Response Format:
+```
 {
     "thoughts": {
         "text": "thought",
@@ -95,6 +97,8 @@ Response Format:
         }
     }
 }
+```
+
 Ensure the response can be parsed by Python json.loads
 
 # ЖЕЛАЕМ УДАЧИ!

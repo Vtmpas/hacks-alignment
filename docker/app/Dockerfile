@@ -1,7 +1,7 @@
-FROM --platform=linux/amd64 python:3.10
+FROM --platform=linux/amd64 nvidia/cuda:12.0.1-devel-ubuntu22.04
 
 # Сборка зависимостей
-ARG BUILD_DEPS="curl"
+ARG BUILD_DEPS="software-properties-common curl python3.10 python3.10-venv python3.10-dev python3-pip git"
 RUN apt-get update && apt-get install -y $BUILD_DEPS
 
 # Установка poetry

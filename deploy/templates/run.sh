@@ -4,4 +4,10 @@ set -ue
 
 cd {{ workdir }}
 
-docker compose up --build --detach --remove-orphans
+if [ {{ ENVIRON }} = "prod.ini" ]; then
+  sudo docker compose up --build --detach --remove-orphans
+fi
+
+if [ {{ ENVIRON }} = "test.ini" ]; then
+  docker-compose up --build --detach --remove-orphans
+fi

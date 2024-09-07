@@ -2,6 +2,6 @@
 
 set -ue
 
-docker image prune -af
+sudo docker image prune -af
 
-docker container prune -af
+sudo docker container prune -af

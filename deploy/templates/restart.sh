@@ -4,4 +4,4 @@ set -ue
 
 cd {{ workdir }}
 
-docker composeя restart
+sudo docker compose restart
