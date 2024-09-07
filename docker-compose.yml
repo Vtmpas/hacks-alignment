@@ -9,7 +9,7 @@ services:
               device_ids: ['0', '1', '2', '3']
               capabilities: [ gpu ]
     ports:
-      - 8000:8081
+      - 8000:8000
     shm_size: "64gb"
     runtime: nvidia
     restart: always
