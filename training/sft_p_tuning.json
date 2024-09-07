@@ -45,7 +45,8 @@
     "model_path": "model_fp16",
     "model_type": "causal",
     "transformers_settings": {
-      "low_cpu_mem_usage": true
+      "low_cpu_mem_usage": true,
+      "use_cache": true
     },
     "model_kwargs": {
         "attn_implementation": "eager",
