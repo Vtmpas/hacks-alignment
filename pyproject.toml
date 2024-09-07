@@ -16,6 +16,7 @@ requests = "^2.32.3"
 litserve = "^0.2.2"
 huggingface-hub = "^0.24.6"
 vllm = "^0.6.0"
+jsonformer = "^0.12.0"
 
 [tool.poetry.group.bot.dependencies]
 aiogram = "^3.12.0"

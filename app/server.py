@@ -4,8 +4,7 @@ import json
 import litserve as ls
 from fastapi import HTTPException
 from huggingface_hub import snapshot_download
-from pydantic import ValidationError as PydanticValidationError
-from schemas import PredictOutputModel, RequestModel, ResponseModel, ValidationError
+from schemas import RequestModel, ResponseModel, ValidationError
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
 from vllm.lora.request import LoRARequest
@@ -43,7 +42,7 @@ class SimpleLitAPI(ls.LitAPI):
     def decode_request(self, request: RequestModel, **kwargs) -> str:
         return request.query
 
-    def predict(self, prompt: str, **kwargs) -> PredictOutputModel:
+    def predict(self, prompt: str, **kwargs) -> str:
         prompt = self.tokenizer.apply_chat_template(
             [{"role": "user", "content": prompt}], tokenize=False, add_generation_prompt=True
         )
@@ -56,20 +55,7 @@ class SimpleLitAPI(ls.LitAPI):
         output = response[0].outputs[0].text
 
         try:
-            return PredictOutputModel(**json.loads(output))
-
-        except PydanticValidationError as error:
-            errors = error.errors()
-            raise HTTPException(
-                422,
-                detail=str(
-                    ValidationError(
-                        loc=[error_["loc"] for error_ in errors] if errors else [],
-                        msg=errors[0]["msg"] if errors else "Unknown Validation error",
-                        type=errors[0]["type"] if errors else "PydanticValidationError",
-                    )
-                ),
-            ) from None
+            return json.dumps(json.loads(output))
 
         except json.decoder.JSONDecodeError as error:
             raise HTTPException(
@@ -86,17 +72,11 @@ class SimpleLitAPI(ls.LitAPI):
         except Exception as error:
             raise HTTPException(
                 500,
-                detail=str(
-                    ValidationError(
-                        loc=["0"],
-                        msg=f"Uncaught exception: {error}. Got: {output}",
-                        type="UncaughtException",
-                    )
-                ),
+                detail=f"Uncaught exception: {error}. Got: {output}",
             ) from None
 
-    def encode_response(self, output: PredictOutputModel, **kwargs) -> ResponseModel:
-        return ResponseModel(text=str(output))
+    def encode_response(self, output: str, **kwargs) -> ResponseModel:
+        return ResponseModel(text=output)
 
 
 if __name__ == "__main__":

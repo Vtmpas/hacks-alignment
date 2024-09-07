@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import List
 
 from pydantic import BaseModel
 
@@ -15,36 +15,3 @@ class RequestModel(BaseModel):
 
 class ResponseModel(BaseModel):
     text: str
-
-
-class ThoughtsModel(BaseModel):
-    text: str
-    reasoning: str
-    plan: str
-    criticism: str
-    speak: str
-
-
-class CommandModel(BaseModel):
-    name: str
-    args: Dict[str, str]
-
-
-class PredictOutputModel(BaseModel):
-    thoughts: ThoughtsModel
-    command: CommandModel
-
-
-DummyModelOutput = PredictOutputModel(
-    thoughts=ThoughtsModel(
-        text="thought",
-        reasoning="reasoning",
-        plan="- short bulleted\n- list that conveys\n- long-term plan",
-        criticism="constructive self-criticism",
-        speak="thoughts summary to say to user",
-    ),
-    command=CommandModel(
-        name="command name",
-        args={"arg name": "value"},
-    ),
-)
