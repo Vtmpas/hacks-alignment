@@ -18,7 +18,7 @@
     },
     "dataset_type": "chat",
     "max_tokens_count": 2000,
-    "only_answer_loss": false
+    "only_answer_loss": true
   },
   "val_dataset_settings": {
     "sources": [
@@ -108,7 +108,7 @@
   "tokenizer_settings": {},
   "trainer_settings": {
     "evaluation_strategy": "steps",
-    "save_total_limit": 5,
+    "save_total_limit": 15,
     "load_best_model_at_end": false,
     "per_device_train_batch_size": 1,
     "per_device_eval_batch_size": 1,
