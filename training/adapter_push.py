@@ -5,7 +5,7 @@ import os
 adapter_path = os.path.expanduser("~/hacks-alignment/train_output/trainer/checkpoint-75")
 
 # Define your repository name (replace 'your-username/my-private-repo' with your desired repo path)
-repo_name = "vtmpas/hack-ada-lora"  # Replace with your repository path
+repo_name = "Vtmpas/hack-ada-lora"  # Replace with your repository path
 adapter_repo_url = f"https://huggingface.co/{repo_name}"
 
 # Step 1: Create a private repository on Hugging Face Hub
