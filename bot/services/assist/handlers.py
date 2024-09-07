@@ -28,7 +28,7 @@ async def handler_free(message: Message, state: FSMContext) -> None:
             sock_read=60,
         )
 
-        url = "http://app:8000/predict"
+        url = "http://app:8000/assist"
         json = {"query": query}
 
         async with aiohttp.ClientSession(timeout=timeout) as session:
