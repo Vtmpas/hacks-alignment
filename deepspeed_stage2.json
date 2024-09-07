@@ -1,9 +1,9 @@
 {
     "fp16": {
-         "enabled": "auto"
+         "enabled": true
      },
      "bf16": {
-        "enabled": "auto"
+        "enabled": false
      },
      "optimizer": {
       "type": "AdamW",
@@ -25,7 +25,7 @@
      },
 
     "zero_optimization": {
-       "stage": 2,
+       "stage": 3,
        "cpu_offload": false,
        "allgather_partitions": true,
        "allgather_bucket_size": 2e8,
