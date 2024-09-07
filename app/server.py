@@ -4,6 +4,7 @@ import json
 import litserve as ls
 from fastapi import HTTPException
 from huggingface_hub import snapshot_download
+from torch import dtype
 
 from transformers import AutoTokenizer
 
@@ -37,6 +38,7 @@ class SimpleLitAPI(ls.LitAPI):
         self.llm = LLM(
             model="AnatoliiPotapov/T-lite-instruct-0.1",
             enable_lora=True,
+            dtype="half",
             tensor_parallel_size=4,
         )
 
