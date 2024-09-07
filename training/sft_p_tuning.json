@@ -108,7 +108,7 @@
     "logging_steps": 1,
     "fp16": false,
     "bf16": false,
-    "eval_steps": 15,
+    "eval_steps": 2,
     "save_steps": 15,
     "learning_rate": 0.00004,
     "num_train_epochs": 3,
@@ -119,7 +119,8 @@
     "adam_beta2": 0.98,
     "adam_epsilon": 1e-6,
     "weight_decay": 0.01,
-    "max_grad_norm": 0.5
+    "max_grad_norm": 0.5,
+    "use_cache": false
   },
   "wandb_settings": {
     "project_name": "alignment",
