@@ -42,7 +42,7 @@
     "only_answer_loss": true
   },
   "model_settings": {
-    "model_path": "AnatoliiPotapov/T-lite-instruct-0.1",
+    "model_path": "model_fp16",
     "model_type": "causal",
     "transformers_settings": {
       "low_cpu_mem_usage": true
