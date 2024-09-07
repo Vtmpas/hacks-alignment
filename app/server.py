@@ -83,6 +83,18 @@ class SimpleLitAPI(ls.LitAPI):
                 ),
             ) from None
 
+        except Exception as error:
+            raise HTTPException(
+                500,
+                detail=str(
+                    ValidationError(
+                        loc=["0"],
+                        msg=f"Uncaught exception: {error}. Got: {output}",
+                        type="UncaughtException",
+                    )
+                ),
+            ) from None
+
     def encode_response(self, output: PredictOutputModel, **kwargs) -> ResponseModel:
         return ResponseModel(text=str(output))
 
