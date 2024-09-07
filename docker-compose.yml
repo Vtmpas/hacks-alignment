@@ -3,6 +3,7 @@ services:
     image: konductor14/hacks-alignment-app:latest
     ports:
       - 8000:8081
+    runtime: nvidia
     restart: always
   bot:
     image: konductor14/hacks-alignment-bot:latest

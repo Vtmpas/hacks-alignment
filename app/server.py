@@ -29,7 +29,7 @@ class SimpleLitAPI(ls.LitAPI):
             temperature=0,
             max_tokens=256,
         )
-        self.llm = LLM(model="AnatoliiPotapov/T-lite-instruct-0.1", enable_lora=True)
+        self.llm = LLM(model="AnatoliiPotapov/T-lite-instruct-0.1", enable_lora=True, dtype="half")
 
     def decode_request(self, request: RequestModel, **kwargs) -> str:
         return request.query

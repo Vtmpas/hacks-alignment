@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 nvidia/cuda:12.0.1-devel-ubuntu22.04
+FROM --platform=linux/amd64 nvidia/cuda:12.0.1-base-ubuntu22.04
 
 # Сборка зависимостей
 ARG BUILD_DEPS="software-properties-common curl python3.10 python3.10-venv python3.10-dev python3-pip git"
@@ -19,4 +19,4 @@ RUN poetry config virtualenvs.create false && \
 # Копирование в контейнер папок и файлов.
 COPY app app
 
-ENTRYPOINT ["python", "app/server.py"]
+ENTRYPOINT ["python3", "app/server.py"]
