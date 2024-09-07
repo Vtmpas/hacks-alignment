@@ -4,12 +4,9 @@ import json
 import litserve as ls
 from fastapi import HTTPException
 from huggingface_hub import snapshot_download
-from torch import dtype
-
-from transformers import AutoTokenizer
-
 from pydantic import ValidationError as PydanticValidationError
 from schemas import PredictOutputModel, RequestModel, ResponseModel, ValidationError
+from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
 from vllm.lora.request import LoRARequest
 
@@ -34,6 +31,7 @@ class SimpleLitAPI(ls.LitAPI):
         self.sampling_params = SamplingParams(
             temperature=0,
             max_tokens=256,
+            stop=["<|eot_id|>"],
         )
         self.llm = LLM(
             model="AnatoliiPotapov/T-lite-instruct-0.1",
@@ -47,9 +45,7 @@ class SimpleLitAPI(ls.LitAPI):
 
     def predict(self, prompt: str, **kwargs) -> PredictOutputModel:
         prompt = self.tokenizer.apply_chat_template(
-            [{'role': 'user', 'content': prompt}],
-            tokenize=False,
-            add_generation_prompt=True
+            [{"role": "user", "content": prompt}], tokenize=False, add_generation_prompt=True
         )
         response = self.llm.generate(
             prompts=[prompt],
