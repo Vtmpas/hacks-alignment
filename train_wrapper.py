@@ -1,7 +1,8 @@
-import torch
-import subprocess
 import os
+import subprocess
 from contextlib import contextmanager
+
+import torch
 
 
 @contextmanager
@@ -26,7 +27,7 @@ def configure_environment():
 
 
 # Run the original command
-if __name__ == '__main__':
+if __name__ == "__main__":
     torch.backends.cuda.enable_mem_efficient_sdp(False)
     torch.backends.cuda.enable_flash_sdp(False)
     launch_code = "poetry run python -m turbo_alignment train_sft --experiment_settings_path training/sft.json"

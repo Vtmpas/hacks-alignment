@@ -2,6 +2,6 @@
 
 set -ue
 
-docker stop hacks-alignment-app-1 hacks-alignment-bot-1 || true
+docker stop deployments-bot-1 deployments-app-1 || true
 
-docker rm -f hacks-alignment-app-1 hacks-alignment-bot-1 || true
+docker rm -f deployments-bot-1 deployments-app-1 || true

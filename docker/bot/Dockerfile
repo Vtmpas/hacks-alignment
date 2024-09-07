@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM --platform=linux/amd64 python:3.10
 
 # Сборка зависимостей
 ARG BUILD_DEPS="curl"
