@@ -114,7 +114,7 @@
     "per_device_eval_batch_size": 1,
     "gradient_accumulation_steps": 8,
     "logging_steps": 1,
-    "fp16": true,
+    "fp16": false,
     "bf16": false,
     "eval_steps": 1,
     "save_steps": 8,
