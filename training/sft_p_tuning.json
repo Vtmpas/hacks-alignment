@@ -56,47 +56,6 @@
     "num_virtual_tokens": 32
     }
   },
-  "cherry_pick_settings": {
-    "generator_transformers_settings": {
-      "num_beams": 2,
-      "max_new_tokens": 64,
-      "repetition_penalty": 1.02,
-      "use_cache": false
-    },
-    "custom_generation_settings": {
-      "skip_special_tokens": false
-    },
-    "dataset_settings": {
-      "sources": [
-        {
-          "name": "test",
-          "records_path": "training/test_results.jsonl",
-          "num_samples": 3
-        }
-      ],
-      "prompt_template": {
-        "role_tag_mapping": {
-          "bot": "assistant",
-          "user": "user",
-          "system": "system"
-        },
-        "prefix_template": "<|start_header_id|>{role}<|end_header_id|>\n\n",
-        "suffix_template": "<|eot_id|>"
-      },
-      "dataset_type": "chat",
-      "max_tokens_count": 2000,
-      "random_cut": true,
-      "only_answer_loss": true
-    },
-    "metric_settings": [
-      {
-        "type": "length",
-        "parameters": {
-          "need_average": [false, true]
-        }
-      }
-    ]
-  },
   "tokenizer_settings": {},
   "trainer_settings": {
     "evaluation_strategy": "steps",
