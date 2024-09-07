@@ -108,7 +108,7 @@
     "logging_steps": 1,
     "fp16": false,
     "bf16": false,
-    "eval_steps": 2,
+    "eval_steps": 5,
     "save_steps": 15,
     "learning_rate": 0.00004,
     "num_train_epochs": 3,
