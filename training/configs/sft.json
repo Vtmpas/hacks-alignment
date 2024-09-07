@@ -3,7 +3,7 @@
     "sources": [
       {
         "name": "train",
-        "records_path": "training/train_results.jsonl",
+        "records_path": "prompts/train_results.jsonl",
         "num_samples": 360
       }
     ],
@@ -24,7 +24,7 @@
     "sources": [
       {
         "name": "test",
-        "records_path": "training/test_results.jsonl",
+        "records_path": "prompts/test_results.jsonl",
         "num_samples": 60
       }
     ],
@@ -49,27 +49,15 @@
     },
     "model_kwargs": {
         "attn_implementation": "eager",
-        "device_map": "auto"
-    },
-    "peft_settings": {
-      "r": 8,
-      "lora_alpha": 16,
-      "lora_dropout": 0.05,
-      "target_modules": [
-        "q_proj",
-        "v_proj",
-        "k_proj",
-        "o_proj"
-      ],
-      "task_type": "CAUSAL_LM",
-      "name": "LORA"
+        "device_map": "auto",
+        "use_cache": true
     }
   },
   "cherry_pick_settings": {
     "generator_transformers_settings": {
-      "num_beams": 2,
       "max_new_tokens": 64,
-      "repetition_penalty": 1.02
+      "repetition_penalty": 1.02,
+      "do_sample": true
     },
     "custom_generation_settings": {
       "skip_special_tokens": false
@@ -78,8 +66,8 @@
       "sources": [
         {
           "name": "test",
-          "records_path": "training/test_results.jsonl",
-          "num_samples": 3
+          "records_path": "prompts/test_results.jsonl",
+          "num_samples": 1
         }
       ],
       "prompt_template": {
@@ -108,18 +96,18 @@
   "tokenizer_settings": {},
   "trainer_settings": {
     "evaluation_strategy": "steps",
-    "save_total_limit": 15,
-    "load_best_model_at_end": false,
+    "save_total_limit": 2,
+    "load_best_model_at_end": true,
     "per_device_train_batch_size": 1,
     "per_device_eval_batch_size": 1,
     "gradient_accumulation_steps": 8,
     "logging_steps": 1,
     "fp16": false,
     "bf16": false,
-    "eval_steps": 15,
-    "save_steps": 15,
+    "eval_steps": 45,
+    "save_steps": 45,
     "learning_rate": 0.00004,
-    "num_train_epochs": 3,
+    "num_train_epochs": 2,
     "lr_scheduler_type": "cosine",
     "warmup_ratio": 0.3,
     "optim": "adamw_torch",
@@ -131,8 +119,8 @@
   },
   "wandb_settings": {
     "project_name": "alignment",
-    "run_name": "sft",
+    "run_name": "sft_p",
     "entity": "mtvey-s"
   },
-  "log_path": "train_output"
+  "log_path": "train_output_p"
 }

@@ -1,3 +1,4 @@
+import argparse
 import os
 import subprocess
 from contextlib import contextmanager
@@ -26,9 +27,16 @@ def configure_environment():
         os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 
+def parse_arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", type=str, required=True)
+    return parser.parse_args()
+
+
 # Run the original command
 if __name__ == "__main__":
+    args = parse_arguments()
     torch.backends.cuda.enable_mem_efficient_sdp(False)
     torch.backends.cuda.enable_flash_sdp(False)
-    launch_code = "poetry run python -m turbo_alignment train_sft --experiment_settings_path training/sft.json"
-    subprocess.run(launch_code, shell=True)
+    launch_code = f"poetry run python -m turbo_alignment train_sft --experiment_settings_path {args.config}"
+    subprocess.run(launch_code, shell=True)  # noqa: S602

@@ -1,3 +1,4 @@
+# ruff: noqa
 import concurrent.futures
 import json
 import re

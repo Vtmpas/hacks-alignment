@@ -1,5 +1,6 @@
-from huggingface_hub import HfApi, Repository
 import os
+
+from huggingface_hub import HfApi, Repository
 
 # Full path to the adapter
 adapter_path = os.path.expanduser("~/hacks-alignment/train_output/trainer/checkpoint-75")

@@ -1,106 +1,175 @@
-### Добро пожаловать на кейс компании "Т-Банк" "Алайнмент T-Lite под агентские кейсы"!
-***
-В представленном архиве вы можете увидеть следующие папки и файлы
+# Проект T-Bank T-Lite Alignment
 
-1. Файл **openapi.yaml** --- openapi контракт для развертывания модели с целью обращения к ней по API. Обратим внимание, что текст ответа модели должен представлять собой строку следующего формата:
-```
-    {
-        "thoughts": {
-            "text": "thought",
-            "reasoning": "reasoning",
-            "plan": "- short bulleted\n- list that conveys\n- long-term plan",
-            "criticism": "constructive self-criticism",
-            "speak": "thoughts summary to say to user"
-        },
-        "command": {
-            "name": "command name",
-            "args": {
-                "arg name": "value"
-            }
-        }
-    }
-```
-***
+## Общая информация
+Этот проект нацелен на настройку языковой модели T-Bank T-Lite для использования в конкретных агентных сценариях. Модель предназначена для интерпретации запросов пользователей, определения соответствующих команд и аргументов, а также предоставления обоснований и планирования в своих ответах.
 
-##### Вашей задачей будет произведение alignment'а большой языковой модели Т-Банка T-lite.
+## Цель
+Основная задача — обучить и развернуть языковую модель, которая сможет:
+1. Понимать запросы пользователей, описанные на естественном языке.
+2. Определять соответствующие команды и аргументы.
+3. Предоставлять обоснования и планирование в ответах.
+4. Оправдывать свои ответы с помощью конструктивной самокритики.
 
-В качестве модели для alignment'а рассматривается [модель](https://huggingface.co/AnatoliiPotapov/T-lite-instruct-0.1). Alignment необходимо провести для агентского кейса, при котором модель получает от пользователя некоторое пожелание, описанное на естественном языке, а в ответ должна определить, какой команде и каким аргументам соответствует пожелание. Возможно использовать для данной задачи такую библиотеку [как](https://github.com/turbo-llm/turbo-alignment). Важно также, чтобы модель помимо определения команды и параметров могла также обосновывать свой ответ рассуждениями, которые располагаются в формате ответа выше. Для alignment'а необходимо будет подготовить датасет, для генерации которого допустимо использовать прочие большие языковые модели. Для проверки решения будет использоваться набор заранее заготовленных примеров, которые будут запрошены по API к вамим моделям. В качестве метрики оценки будет использоваться аналог Accuracy, где правильность ответа будет определять большая языковая модель на стороне кейсодержателя. Важно соответствие вашего развернутного решения котракту, приложенному в данном архиве. Помимо оценки метрикой, будет также проводится оценка жюри, так что не забывайте об отраслевых и технических критериях.
+## Сервисы
+1. **Инференс модели:** http://176.109.104.144:8000/docs
+2. **Телеграм Бот** https://t.me/bot_for_testing_apps_bot
 
-Пример возможного промта:
-You are {{ai-name}}, {{user-provided AI bot description}}.
-Your decisions must always be made independently without seeking user assistance. Play to your strengths as an LLM and pursue simple strategies with no legal complications.
+В целях хостинга используются два сервера: 
+1. **Прод. 4 GPU:** `prod`
+    ```bash:deploy/prod.ini
+    ssh user1@176.109.104.144 
+    ```
+2. **Тест. Нут GPU:** `test`
+    ```bash:deploy/prod.ini
+    ssh root@89.110.109.100 
+    ```
+   
+## Установка
+Для установки проекта выполните следующие шаги:
 
-GOALS:
+1. **Клонируйте репозиторий:**
+    ```bash
+    git clone <repository_url>
+    cd <repository_directory>
+    ```
 
-1. {{user-provided goal 1}}
-2. {{user-provided goal 2}}
-3. ...
-4. ...
-5. ...
+2. **Установите зависимости с помощью Poetry:**
+    ```bash
+    poetry install
+    ```
 
-Constraints:
-1. ~4000 word limit for short term memory. Your short term memory is short, so immediately save important information to files.
-2. If you are unsure how you previously did something or want to recall past events, thinking about similar events will help you remember.
-3. No user assistance
-4. Exclusively use the commands listed in double quotes e.g. "command name"
-5. Use subprocesses for commands that will not terminate within a few minutes
+3. **Настройте pre-commit хуки:**
+    ```bash
+    poetry run pre-commit install
+    ```
 
-Commands:
-1. Google Search: "google", args: "input": "<search>"
-2. Browse Website: "browse_website", args: "url": "<url>", "question": "<what_you_want_to_find_on_website>"
-3. Start GPT Agent: "start_agent", args: "name": "<name>", "task": "<short_task_desc>", "prompt": "<prompt>"
-4. Message GPT Agent: "message_agent", args: "key": "<key>", "message": "<message>"
-5. List GPT Agents: "list_agents", args:
-6. Delete GPT Agent: "delete_agent", args: "key": "<key>"
-7. Clone Repository: "clone_repository", args: "repository_url": "<url>", "clone_path": "<directory>"
-8. Write to file: "write_to_file", args: "file": "<file>", "text": "<text>"
-9. Read file: "read_file", args: "file": "<file>"
-10. Append to file: "append_to_file", args: "file": "<file>", "text": "<text>"
-11. Delete file: "delete_file", args: "file": "<file>"
-12. Search Files: "search_files", args: "directory": "<directory>"
-13. Analyze Code: "analyze_code", args: "code": "<full_code_string>"
-14. Get Improved Code: "improve_code", args: "suggestions": "<list_of_suggestions>", "code": "<full_code_string>"
-15. Write Tests: "write_tests", args: "code": "<full_code_string>", "focus": "<list_of_focus_areas>"
-16. Execute Python File: "execute_python_file", args: "file": "<file>"
-17. Generate Image: "generate_image", args: "prompt": "<prompt>"
-18. Send Tweet: "send_tweet", args: "text": "<text>"
-19. Do Nothing: "do_nothing", args:
-20. Task Complete (Shutdown): "task_complete", args: "reason": "<reason>"
+## Конфигурация и обучение
+Проект использует несколько конфигурационных файлов для управления настройками обучения:
 
-Resources:
-1. Internet access for searches and information gathering.
-2. Long Term memory management.
-3. GPT-3.5 powered Agents for delegation of simple tasks.
-4. File output.
+- **Конфигурация обучения - LORA:** `training/configs/lora.json`
+    ```json:training/configs/lora.json
+    python training/run.py --config training/configs/lora.json
+    ```
 
-Performance Evaluation:
-1. Continuously review and analyze your actions to ensure you are performing to the best of your abilities.
-2. Constructively self-criticize your big-picture behavior constantly.
-3. Reflect on past decisions and strategies to refine your approach.
-4. Every command has a cost, so be smart and efficient. Aim to complete tasks in the least number of steps.
+- **Конфигурация SFT P-Tuning:** `training/configs/sft.json`
+    ```json:training/sft.json
+    python training/run.py --config training/configs/sft.json
+    ```
 
-You should only respond in JSON format as described below
-Response Format:
-```
+## Подготовка датасетов
+Датасеты для обучения и валидации указываются в конфигурационных файлах. Примеры файлов с датасетами:
+- `prompts/train_results.jsonl`
+- `prompts/test_results.jsonl`
+
+Пример содержимого файла `train_results.jsonl`:
+```json
 {
-    "thoughts": {
-        "text": "thought",
-        "reasoning": "reasoning",
-        "plan": "- short bulleted\n- list that conveys\n- long-term plan",
-        "criticism": "constructive self-criticism",
-        "speak": "thoughts summary to say to user"
-    },
-    "command": {
-        "name": "command name",
-        "args": {
-            "arg name": "value"
-        }
+  "id": 0, 
+  "source": "example", 
+  "messages": [
+    {"role": "user",
+      "content": "Вы -- полезный помощник со следующими функциями: Поиск новостных статей на основе указанных ключевых слов: 'search_news', аргументы: 'keywords': '<Ключевые слова для использования в поиске>', 'source': '<Источник новостей для поиска>', 'date_range': '<Неизвестно>'\nМожете найти для меня несколько новостных статей о марсоходе от BBC с 1 января 2021 года по 31 января 2021 года?"
+    }, {
+      "role": "bot",
+      "content": "{\"thoughts\": {\"text\": \"Я могу использовать функцию поиска новостей, чтобы найти статьи о марсоходе от BBC за указанный период.\", \"reasoning\": \"Используя функцию поиска новостей, я смогу найти статьи, соответствующие заданным критериям, таким как ключевые слова, источник и диапазон дат.\", \"plan\": \"- Использовать функцию поиска новостей\\n- Указать ключевые слова, источник и диапазон дат\\n- Вернуть найденные статьи\", \"criticism\": \"Я должен убедиться, что правильно указал все параметры для поиска, чтобы получить точные результаты.\", \"speak\": \"Я сейчас найду статьи о марсоходе от BBC за январь 2021 года.\"}, \"command\": {\"name\": \"search_news\", \"args\": {\"keywords\": [\"Mars Rover\"], \"source\": \"BBC\", \"date_range\": {\"start_date\": \"2021-01-01\", \"end_date\": \"2021-01-31\"}}}}"
+    }, 
+    {
+      "role": "user", 
+      "content": "{\"articles\": [{\"title\": \"Mars Rover lands successfully\", \"date\": \"2021-01-18\", \"link\": \"https://www.bbc.com/news/science-environment-55768544\"}, {\"title\": \"Mars Rover sends first images\", \"date\": \"2021-01-22\", \"link\": \"https://www.bbc.com/news/science-environment-55768545\"}]}"}, 
+    {
+      "role": "bot", 
+      "content": "{\"thoughts\": {\"text\": \"Я нашел две статьи о марсоходе от BBC за январь 2021 года.\", \"reasoning\": \"Я использовал функцию поиска новостей и нашел две статьи, которые соответствуют заданным критериям.\", \"plan\": \"- Сообщить пользователю о найденных статьях\\n- Предоставить ссылки на статьи\", \"criticism\": \"Я должен убедиться, что предоставил все необходимые ссылки и информацию о статьях.\", \"speak\": \"Я нашел две статьи о марсоходе от BBC за январь 2021 года.\"}, \"command\": {\"name\": \"NoFunction\", \"args\": null}}"
     }
+  ]
 }
 ```
 
-Ensure the response can be parsed by Python json.loads
+## Запуск модели
+Для запуска модели и получения предсказаний можно использовать API, определенное в файле `openapi.yaml`.
 
-# ЖЕЛАЕМ УДАЧИ!
 
-P.S. Не забудьте посетить экспертные сессии и не стесняйтесь задавать вопросы)
+## Разработка
+
+### Команды Makefile
+Проект включает в себя `Makefile` для выполнения общих задач:
+1. **install:** Устанавливает все зависимости, указанные в файле `pyproject.toml`, с использованием `Poetry`.
+    ```sh
+    make install
+    ```
+
+- **update**: Обновляет все зависимости до последних версий, указанных в файле `pyproject.toml`.
+    ```sh
+    make update
+    ```
+
+- **test**: Устанавливает зависимости для разработки и запускает тесты с помощью `pytest`.
+    ```sh
+    make test
+    ```
+
+- **install-test-deps**: Устанавливает только зависимости для разработки.
+    ```sh
+    make install-test-deps
+    ```
+
+- **lint**: Запускает `ruff` и `mypy` для проверки кода на ошибки линтинга и проблемы с типизацией.
+    ```sh
+    make lint
+    ```
+
+- **format**: Форматирует код с помощью `ruff`.
+    ```sh
+    make format
+    ```
+
+- **clean**: Очищает проект, удаляя артефакты сборки, кэшированные файлы и логи.
+    ```sh
+    make clean
+    ```
+
+- **deploy**: Разворачивает приложение с использованием плейбуков Ansible. Нужно выбрать окружение: тестовое (`test`) или продакшн (`prod`).
+    ```sh
+    make deploy test
+    make deploy prod
+    ```
+
+- **destroy**: Удаляет развернутое приложение с помощью плейбуков Ansible.
+    ```sh
+    make destroy test
+    make destroy prod
+    ```
+
+- **restart**: Перезапускает развернутое приложение с использованием плейбуков Ansible.
+    ```sh
+    make restart test
+    make restart prod
+    ```
+
+### Pre-commit хуки
+
+Проект использует pre-commit хуки для обеспечения качества и согласованности кода перед фиксацией изменений. Эти хуки определены в файле `.pre-commit-config.yaml` и включают как встроенные хуки из репозитория `pre-commit`, так и локально определённые пользовательские хуки.
+
+#### Встроенные хуки
+
+- **trailing-whitespace**: Удаляет лишние пробелы в конце строк.
+- **end-of-file-fixer**: Гарантирует, что файлы заканчиваются новой строкой.
+- **check-yaml**: Проверяет синтаксис YAML-файлов.
+- **check-added-large-files**: Предотвращает добавление в репозиторий больших файлов.
+
+#### Пользовательские хуки
+
+- **format**: Форматирует код с использованием команды `make format`.
+- **lint**: Запускает линтеры с помощью команды `make lint`.
+- **build**: Собирает Docker-образ с помощью команды `make build`.
+
+### Линтинг и форматирование
+В проекте используется `ruff` для линтинга и форматирования, конфигурация находится в `ruff.toml`:
+
+## Вклад в проект
+Приветствуются любые вклады в проект! Пожалуйста, следуйте стандартным рекомендациям по качеству кода и документации.
+
+## Контакты
+По любым вопросам или проблемам обращайтесь:
+- Овчинникова Анастасия: nastyaov1308@gmail.com
+- Сапрыкин Матвей: mtvey.s@gmail.com
+- Хвощев Кирилл: KhvoshchevKMwork@yandex.ru

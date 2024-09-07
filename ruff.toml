@@ -8,8 +8,6 @@ extend-exclude = [
   "build",
   "dist",
   "__init__.py",
-  "training",
-  "train_wrapper.py",
 ]
 
 [lint]
