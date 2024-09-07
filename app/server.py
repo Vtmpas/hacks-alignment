@@ -1,9 +1,11 @@
 # server.py
-from typing import cast
+import json
 
 import litserve as ls
+from fastapi import HTTPException
 from huggingface_hub import snapshot_download
-from schemas import PredictOutputModel, RequestModel, ResponseModel
+from pydantic import ValidationError as PydanticValidationError
+from schemas import PredictOutputModel, RequestModel, ResponseModel, ValidationError
 from vllm import LLM, SamplingParams
 from vllm.lora.request import LoRARequest
 
@@ -34,7 +36,35 @@ class SimpleLitAPI(ls.LitAPI):
             sampling_params=self.sampling_params,
         )
 
-        return cast(PredictOutputModel, response)
+        output = response[0].outputs[0].text
+
+        try:
+            return PredictOutputModel(**json.loads(output))
+
+        except PydanticValidationError as error:
+            errors = error.errors()
+            raise HTTPException(
+                422,
+                detail=str(
+                    ValidationError(
+                        loc=[error_["loc"] for error_ in errors] if errors else [],
+                        msg=errors[0]["msg"] if errors else "Unknown Validation error",
+                        type=errors[0]["type"] if errors else "PydanticValidationError",
+                    )
+                ),
+            ) from None
+
+        except json.decoder.JSONDecodeError as error:
+            raise HTTPException(
+                422,
+                detail=str(
+                    ValidationError(
+                        loc=[str(error.pos)],
+                        msg=error.msg,
+                        type="JSONDecodeError",
+                    )
+                ),
+            ) from None
 
     def encode_response(self, output: PredictOutputModel, **kwargs) -> ResponseModel:
         return ResponseModel(text=str(output))
@@ -47,4 +77,5 @@ if __name__ == "__main__":
         max_batch_size=1,
         api_path="/assist",
         stream=False,
+        timeout=300,
     ).run(port=8000)
