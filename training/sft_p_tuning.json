@@ -64,7 +64,8 @@
       "repetition_penalty": 1.02
     },
     "custom_generation_settings": {
-      "skip_special_tokens": false
+      "skip_special_tokens": false,
+      "use_cache": false
     },
     "dataset_settings": {
       "sources": [
@@ -119,8 +120,7 @@
     "adam_beta2": 0.98,
     "adam_epsilon": 1e-6,
     "weight_decay": 0.01,
-    "max_grad_norm": 0.5,
-    "use_cache": false
+    "max_grad_norm": 0.5
   },
   "wandb_settings": {
     "project_name": "alignment",
