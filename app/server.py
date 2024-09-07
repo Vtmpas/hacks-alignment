@@ -55,7 +55,7 @@ class SimpleLitAPI(ls.LitAPI):
         output = response[0].outputs[0].text
 
         try:
-            return json.dumps(json.loads(output))
+            return str(json.loads(output))
 
         except json.decoder.JSONDecodeError as error:
             raise HTTPException(
