@@ -115,6 +115,7 @@
     "gradient_accumulation_steps": 8,
     "logging_steps": 1,
     "fp16": true,
+    "bf16": false,
     "eval_steps": 1,
     "save_steps": 8,
     "learning_rate": 0.00004,
