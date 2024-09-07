@@ -22,6 +22,7 @@ class SimpleLitAPI(ls.LitAPI):
             lora_path=snapshot_download(
                 repo_id="Vtmpas/hack-ada-lora",
                 token="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",
+                revision="master",
             ),
         )
         self.sampling_params = SamplingParams(
@@ -64,7 +65,7 @@ class SimpleLitAPI(ls.LitAPI):
                 detail=str(
                     ValidationError(
                         loc=[str(error.pos)],
-                        msg=error.msg,
+                        msg=f"{error.msg} as pos {error.pos}. Got: {output}",
                         type="JSONDecodeError",
                     )
                 ),
