@@ -60,7 +60,8 @@
     "generator_transformers_settings": {
       "num_beams": 2,
       "max_new_tokens": 64,
-      "repetition_penalty": 1.02
+      "repetition_penalty": 1.02,
+      "use_cache": false
     },
     "custom_generation_settings": {
       "skip_special_tokens": false
