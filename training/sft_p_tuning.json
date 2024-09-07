@@ -1,0 +1,128 @@
+{
+  "train_dataset_settings": {
+    "sources": [
+      {
+        "name": "train",
+        "records_path": "training/train_results.jsonl",
+        "num_samples": 360
+      }
+    ],
+    "prompt_template": {
+      "role_tag_mapping": {
+        "bot": "assistant",
+        "user": "user",
+        "system": "system"
+      },
+      "prefix_template": "<|start_header_id|>{role}<|end_header_id|>\n\n",
+      "suffix_template": "<|eot_id|>"
+    },
+    "dataset_type": "chat",
+    "max_tokens_count": 2000,
+    "only_answer_loss": true
+  },
+  "val_dataset_settings": {
+    "sources": [
+      {
+        "name": "test",
+        "records_path": "training/test_results.jsonl",
+        "num_samples": 60
+      }
+    ],
+    "prompt_template": {
+      "role_tag_mapping": {
+        "bot": "assistant",
+        "user": "user",
+        "system": "system"
+      },
+      "prefix_template": "<|start_header_id|>{role}<|end_header_id|>\n\n",
+      "suffix_template": "<|eot_id|>"
+    },
+    "dataset_type": "chat",
+    "max_tokens_count": 2000,
+    "only_answer_loss": true
+  },
+  "model_settings": {
+    "model_path": "model_fp16",
+    "model_type": "causal",
+    "transformers_settings": {
+      "low_cpu_mem_usage": true
+    },
+    "model_kwargs": {
+        "attn_implementation": "eager",
+        "device_map": "auto"
+    },
+    "peft_settings": {
+    "name": "P_TUNING",
+    "num_virtual_tokens": 32
+  },
+  "cherry_pick_settings": {
+    "generator_transformers_settings": {
+      "num_beams": 2,
+      "max_new_tokens": 64,
+      "repetition_penalty": 1.02
+    },
+    "custom_generation_settings": {
+      "skip_special_tokens": false
+    },
+    "dataset_settings": {
+      "sources": [
+        {
+          "name": "test",
+          "records_path": "training/test_results.jsonl",
+          "num_samples": 3
+        }
+      ],
+      "prompt_template": {
+        "role_tag_mapping": {
+          "bot": "assistant",
+          "user": "user",
+          "system": "system"
+        },
+        "prefix_template": "<|start_header_id|>{role}<|end_header_id|>\n\n",
+        "suffix_template": "<|eot_id|>"
+      },
+      "dataset_type": "chat",
+      "max_tokens_count": 2000,
+      "random_cut": true,
+      "only_answer_loss": true
+    },
+    "metric_settings": [
+      {
+        "type": "length",
+        "parameters": {
+          "need_average": [false, true]
+        }
+      }
+    ]
+  },
+  "tokenizer_settings": {},
+  "trainer_settings": {
+    "evaluation_strategy": "steps",
+    "save_total_limit": 15,
+    "load_best_model_at_end": false,
+    "per_device_train_batch_size": 1,
+    "per_device_eval_batch_size": 1,
+    "gradient_accumulation_steps": 8,
+    "logging_steps": 1,
+    "fp16": false,
+    "bf16": false,
+    "eval_steps": 15,
+    "save_steps": 15,
+    "learning_rate": 0.00004,
+    "num_train_epochs": 3,
+    "lr_scheduler_type": "cosine",
+    "warmup_ratio": 0.3,
+    "optim": "adamw_torch",
+    "adam_beta1": 0.9,
+    "adam_beta2": 0.98,
+    "adam_epsilon": 1e-6,
+    "weight_decay": 0.01,
+    "max_grad_norm": 0.5
+  },
+  "wandb_settings": {
+    "project_name": "alignment",
+    "run_name": "sft_p",
+    "entity": "mtvey-s"
+  },
+  "log_path": "train_output_p"
+}
