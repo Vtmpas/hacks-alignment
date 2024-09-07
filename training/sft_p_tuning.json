@@ -71,7 +71,7 @@
         {
           "name": "test",
           "records_path": "training/test_results.jsonl",
-          "num_samples": 3
+          "num_samples": 0
         }
       ],
       "prompt_template": {
