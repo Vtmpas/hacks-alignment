@@ -68,7 +68,7 @@
   "cherry_pick_settings": {
     "generator_transformers_settings": {
       "num_beams": 2,
-      "max_new_tokens": 128,
+      "max_new_tokens": 64,
       "repetition_penalty": 1.02
     },
     "custom_generation_settings": {
@@ -116,8 +116,8 @@
     "logging_steps": 1,
     "fp16": false,
     "bf16": false,
-    "eval_steps": 1,
-    "save_steps": 8,
+    "eval_steps": 15,
+    "save_steps": 15,
     "learning_rate": 0.00004,
     "num_train_epochs": 3,
     "lr_scheduler_type": "cosine",
