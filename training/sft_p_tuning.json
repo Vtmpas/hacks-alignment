@@ -54,6 +54,7 @@
     "peft_settings": {
     "name": "P_TUNING",
     "num_virtual_tokens": 32
+    }
   },
   "cherry_pick_settings": {
     "generator_transformers_settings": {
