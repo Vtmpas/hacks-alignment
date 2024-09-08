@@ -3,7 +3,7 @@ name = "hacks-alignment"
 version = "0.0.1"
 description = "Project solution for https://hacks-ai.ru/events/1077378"
 authors = [
-    "Matvey Saprykin <matvey.saprykin@mail.ru>",
+    "Matvey Saprykin <mtvey.s@gmail.com>",
     "Kirill Khvoshchev <KhvoshchevKMwork@yandex.ru>",
 ]
 readme = "README.md"
