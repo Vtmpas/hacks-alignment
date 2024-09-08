@@ -1,10 +1,10 @@
 # server.py
 
 import json
+from typing import Optional
 
 import litserve as ls
 from fastapi import HTTPException
-from huggingface_hub import snapshot_download
 from jsonformer_vllm import JsonformerVLLM, json_schema
 from schemas import RequestModel, ResponseModel, ValidationError
 from transformers import AutoTokenizer
@@ -28,7 +28,7 @@ class SimpleLitAPI(ls.LitAPI):
     """
 
     sampling_params: SamplingParams
-    lora: LoRARequest
+    lora: Optional[LoRARequest]
     llm: LLM
     tokenizer: AutoTokenizer
 
@@ -39,24 +39,15 @@ class SimpleLitAPI(ls.LitAPI):
         Args:
             device (str): The device to run the model on, e.g., "cpu" or "cuda".
         """
-        self.tokenizer = AutoTokenizer.from_pretrained("AnatoliiPotapov/T-lite-instruct-0.1")
-        self.lora = LoRARequest(
-            lora_name="sft",
-            lora_int_id=1,
-            lora_path=snapshot_download(
-                repo_id="Vtmpas/hack-ada-lora",
-                token="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",
-                revision="master",
-            ),
-        )
+        self.tokenizer = AutoTokenizer.from_pretrained("GoshaLetov/T-Lite-sft-no-optimizer")
         self.sampling_params = SamplingParams(
             temperature=0,
             max_tokens=256,
             stop=["<|eot_id|>"],
         )
         self.llm = LLM(
-            model="AnatoliiPotapov/T-lite-instruct-0.1",
-            enable_lora=True,
+            model="GoshaLetov/T-Lite-sft-no-optimizer",
+            enable_lora=False,
             dtype="half",
             tensor_parallel_size=4,
         )
@@ -92,7 +83,12 @@ class SimpleLitAPI(ls.LitAPI):
         """
         prompt = self.tokenizer.apply_chat_template(
             [
-                {"role": "user", "content": prompt + '\n' + """Отвечай в основном на русском. Выбранные аргументы "args" тоже должны быть на русском языке"""},
+                {
+                    "role": "user",
+                    "content": prompt
+                    + "\n"
+                    + """Отвечай в основном на русском. Выбранные аргументы "args" тоже должны быть на русском языке""",
+                },
             ],
             tokenize=False,
             add_generation_prompt=True,
@@ -100,7 +96,6 @@ class SimpleLitAPI(ls.LitAPI):
         response = self.llm.generate(
             prompts=[prompt],
             sampling_params=self.sampling_params,
-            lora_request=self.lora,
         )
 
         output = response[0].outputs[0].text
