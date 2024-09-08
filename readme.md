@@ -19,7 +19,7 @@
     ```bash:deploy/prod.ini
     ssh user1@176.109.104.144
     ```
-2. **Тест. Нут GPU:** `test`
+2. **Тест. Нет GPU:** `test`
     ```bash:deploy/prod.ini
     ssh root@89.110.109.100
     ```
@@ -35,6 +35,7 @@
 
 2. **Установите зависимости с помощью Poetry:**
     ```bash
+    poetry shell
     poetry install
     ```
 
@@ -172,4 +173,4 @@
 По любым вопросам или проблемам обращайтесь:
 - Овчинникова Анастасия: nastyaov1308@gmail.com
 - Сапрыкин Матвей: mtvey.s@gmail.com
-- Хвощев Кирилл: KhvoshchevKMwork@yandex.ru
+- Хвощев Кирилл: khvoshchevkmwork@yandex.ru
