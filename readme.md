@@ -14,23 +14,23 @@
 1. **Инференс модели:** http://176.109.104.144:8000/docs
 2. **Телеграм Бот** https://t.me/bot_for_testing_apps_bot
 
-В целях хостинга используются два сервера: 
+В целях хостинга используются два сервера:
 1. **Прод. 4 GPU:** `prod`
     ```bash:deploy/prod.ini
-    ssh user1@176.109.104.144 
+    ssh user1@176.109.104.144
     ```
 2. **Тест. Нут GPU:** `test`
     ```bash:deploy/prod.ini
-    ssh root@89.110.109.100 
+    ssh root@89.110.109.100
     ```
-   
+
 ## Установка
 Для установки проекта выполните следующие шаги:
 
 1. **Клонируйте репозиторий:**
     ```bash
-    git clone <repository_url>
-    cd <repository_directory>
+    git clone https://github.com/Vtmpas/hacks-alignment.git
+    cd hacks-alignment
     ```
 
 2. **Установите зависимости с помощью Poetry:**
@@ -64,20 +64,20 @@
 Пример содержимого файла `train_results.jsonl`:
 ```json
 {
-  "id": 0, 
-  "source": "example", 
+  "id": 0,
+  "source": "example",
   "messages": [
     {"role": "user",
       "content": "Вы -- полезный помощник со следующими функциями: Поиск новостных статей на основе указанных ключевых слов: 'search_news', аргументы: 'keywords': '<Ключевые слова для использования в поиске>', 'source': '<Источник новостей для поиска>', 'date_range': '<Неизвестно>'\nМожете найти для меня несколько новостных статей о марсоходе от BBC с 1 января 2021 года по 31 января 2021 года?"
     }, {
       "role": "bot",
       "content": "{\"thoughts\": {\"text\": \"Я могу использовать функцию поиска новостей, чтобы найти статьи о марсоходе от BBC за указанный период.\", \"reasoning\": \"Используя функцию поиска новостей, я смогу найти статьи, соответствующие заданным критериям, таким как ключевые слова, источник и диапазон дат.\", \"plan\": \"- Использовать функцию поиска новостей\\n- Указать ключевые слова, источник и диапазон дат\\n- Вернуть найденные статьи\", \"criticism\": \"Я должен убедиться, что правильно указал все параметры для поиска, чтобы получить точные результаты.\", \"speak\": \"Я сейчас найду статьи о марсоходе от BBC за январь 2021 года.\"}, \"command\": {\"name\": \"search_news\", \"args\": {\"keywords\": [\"Mars Rover\"], \"source\": \"BBC\", \"date_range\": {\"start_date\": \"2021-01-01\", \"end_date\": \"2021-01-31\"}}}}"
-    }, 
+    },
     {
-      "role": "user", 
-      "content": "{\"articles\": [{\"title\": \"Mars Rover lands successfully\", \"date\": \"2021-01-18\", \"link\": \"https://www.bbc.com/news/science-environment-55768544\"}, {\"title\": \"Mars Rover sends first images\", \"date\": \"2021-01-22\", \"link\": \"https://www.bbc.com/news/science-environment-55768545\"}]}"}, 
+      "role": "user",
+      "content": "{\"articles\": [{\"title\": \"Mars Rover lands successfully\", \"date\": \"2021-01-18\", \"link\": \"https://www.bbc.com/news/science-environment-55768544\"}, {\"title\": \"Mars Rover sends first images\", \"date\": \"2021-01-22\", \"link\": \"https://www.bbc.com/news/science-environment-55768545\"}]}"},
     {
-      "role": "bot", 
+      "role": "bot",
       "content": "{\"thoughts\": {\"text\": \"Я нашел две статьи о марсоходе от BBC за январь 2021 года.\", \"reasoning\": \"Я использовал функцию поиска новостей и нашел две статьи, которые соответствуют заданным критериям.\", \"plan\": \"- Сообщить пользователю о найденных статьях\\n- Предоставить ссылки на статьи\", \"criticism\": \"Я должен убедиться, что предоставил все необходимые ссылки и информацию о статьях.\", \"speak\": \"Я нашел две статьи о марсоходе от BBC за январь 2021 года.\"}, \"command\": {\"name\": \"NoFunction\", \"args\": null}}"
     }
   ]
