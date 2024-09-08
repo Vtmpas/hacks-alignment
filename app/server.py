@@ -95,7 +95,7 @@ class SimpleLitAPI(ls.LitAPI):
                 {
                     "role": "system",
                     "content": 'Отвечай в основном на русском. Выбранные аргументы "args" тоже должны быть на '
-                               'русском языке',
+                    "русском языке",
                 },
                 {"role": "user", "content": prompt},
             ],

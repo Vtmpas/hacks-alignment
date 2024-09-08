@@ -1,7 +1,7 @@
 import concurrent.futures
 import json
 import re
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from datasets import load_dataset
 from openai import OpenAI
@@ -22,7 +22,8 @@ def extract_function_calls(text: str) -> List[Dict[str, Any]]:
         text (str): The input text containing function calls in a specific format.
 
     Returns:
-        List[Dict[str, Any]]: A list of dictionaries where each dictionary represents a function call with its name and arguments.
+        List[Dict[str, Any]]: A list of dictionaries where each dictionary represents a function call with its name
+        and arguments.
     """
     pattern = re.compile(r"<functioncall>\s*({.*?})\s*<\|endoftext\|>", re.DOTALL)
     matches = pattern.findall(text)
@@ -235,7 +236,8 @@ def translate_system(prompt: str) -> str:
     messages = [
         {
             "role": "system",
-            "content": "ANSWER IN RUSSIAN. You are a helpful translator. Returns only the translated text in Russian. Don't translate words in 'words'. ",
+            "content": "ANSWER IN RUSSIAN. You are a helpful translator. Returns only the translated text in Russian. "
+            "Don't translate words in 'words'. ",
         },
         {"role": "user", "content": base_prompt},
     ]
@@ -254,12 +256,15 @@ def prepare_sample(example: Dict[str, Any]) -> Tuple[Optional[List[Dict[str, Any
         example (Dict[str, Any]): The sample example containing chat and system prompts.
 
     Returns:
-        Tuple[Optional[List[Dict[str, Any]]], bool]: A tuple where the first element is the processed dialogue or None, and the second element is a boolean indicating success.
+        Tuple[Optional[List[Dict[str, Any]]], bool]: A tuple where the first element is the processed dialogue or
+        None, and the second element is a boolean indicating success.
     """
     messages = [
         {
             "role": "system",
-            "content": "ANSWER IN RUSSIAN. You are a helpful ASSISTANT that helps with converting answers and translations from English to Russian. Always answer in Russian. If there is no useful command then answer 'NoFunction'",
+            "content": "ANSWER IN RUSSIAN. You are a helpful ASSISTANT that helps with converting answers and "
+            "translations from English to Russian. Always answer in Russian. If there is no useful command "
+            "then answer 'NoFunction'",
         },
         {"role": "user", "content": example["chat"]},
     ]
