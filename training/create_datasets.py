@@ -1,5 +1,5 @@
-import json
 import concurrent.futures
+import json
 import re
 from typing import Any, Dict, List, Optional, Union
 
@@ -76,6 +76,7 @@ class Thought(BaseModel):
         criticism (str): Self-criticism in Russian.
         speak (str): Summary to communicate to the user in Russian.
     """
+
     text: str = Field(..., description="Summary of thought. In Russian")
     reasoning: str = Field(..., description="Explanation of reasoning. In Russian")
     plan: str = Field(..., description="Plan of action - short bulleted list in Russian")
@@ -91,6 +92,7 @@ class Command(BaseModel):
         name (str): Name of the command to execute.
         args (Optional[Dict[str, Any]]): Arguments for the command.
     """
+
     name: str = Field(..., description="Name of the command to execute. <functioncall>")
     args: Optional[Dict[str, Any]] = Field(None, description="Arguments for the command.")
 
@@ -103,6 +105,7 @@ class FormattedResponse(BaseModel):
         thoughts (Thought): The thought process related to the response.
         command (Command): The command to be executed as part of the response.
     """
+
     thoughts: Thought
     command: Command
 
@@ -115,10 +118,10 @@ class FullResponse(BaseModel):
         role (str): Role of the message sender (USER, ASSISTANT, or FUNCTION RESPONSE).
         content (Union[str, FormattedResponse]): Content of the message, which can be a string or a FormattedResponse.
     """
+
     role: str = Field(..., description="USER or ASSISTANT or FUNCTION RESPONSE")
     content: Union[str, FormattedResponse] = Field(
-        ...,
-        description="Content of the message, either a string for user or FormattedResponse for assistant."
+        ..., description="Content of the message, either a string for user or FormattedResponse for assistant."
     )
 
 
@@ -129,6 +132,7 @@ class DialogueResponse(BaseModel):
     Attributes:
         dialogue (List[FullResponse]): The full dialogue as a list of responses.
     """
+
     dialogue: List[FullResponse] = Field(..., description="Full dialogue according to schemas")
 
 
@@ -313,7 +317,9 @@ def process_dataset(dataset: List[Dict[str, Any]]) -> List[List[Dict[str, Any]]]
     return results
 
 
-def create_jsonl_from_processed_results(processed_results: List[List[Dict[str, Any]]], output_file: str = "output.jsonl") -> None:
+def create_jsonl_from_processed_results(
+    processed_results: List[List[Dict[str, Any]]], output_file: str = "output.jsonl"
+) -> None:
     """
     Creates a JSONL file from processed results.
 
@@ -345,11 +351,11 @@ def create_jsonl_from_processed_results(processed_results: List[List[Dict[str, A
 
 
 def process_and_split_results(
-    processed_results: List[List[Dict[str, Any]]], 
-    train_file: str = "train.jsonl", 
-    test_file: str = "test.jsonl", 
-    test_size: float = 0.2, 
-    random_state: int = 42
+    processed_results: List[List[Dict[str, Any]]],
+    train_file: str = "train.jsonl",
+    test_file: str = "test.jsonl",
+    test_size: float = 0.2,
+    random_state: int = 42,
 ) -> None:
     """
     Processes and splits results into training and testing sets, and saves them as JSONL files.

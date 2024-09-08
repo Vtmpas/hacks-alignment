@@ -91,9 +91,16 @@ class SimpleLitAPI(ls.LitAPI):
             exception occurs during response generation.
         """
         prompt = self.tokenizer.apply_chat_template(
-            [   {"role": "system", "content": 'Отвечай в основном на русском. Выбранные аргументы "args" тоже должны быть на русском языке'},
-                {"role": "user", "content": prompt}
-            ], tokenize=False, add_generation_prompt=True
+            [
+                {
+                    "role": "system",
+                    "content": 'Отвечай в основном на русском. Выбранные аргументы "args" тоже должны быть на '
+                               'русском языке',
+                },
+                {"role": "user", "content": prompt},
+            ],
+            tokenize=False,
+            add_generation_prompt=True,
         )
         response = self.llm.generate(
             prompts=[prompt],
