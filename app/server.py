@@ -46,7 +46,9 @@ class SimpleLitAPI(ls.LitAPI):
 
     def predict(self, prompt: str, **kwargs) -> str:
         prompt = self.tokenizer.apply_chat_template(
-            [{"role": "user", "content": prompt}], tokenize=False, add_generation_prompt=True
+            [   {"role": "sysytem", "content": 'Отвечай в основном на русском. Выбранные аргументы "args" тоже должны быть на русском языке'},
+                {"role": "user", "content": prompt}
+            ], tokenize=False, add_generation_prompt=True
         )
         response = self.llm.generate(
             prompts=[prompt],
