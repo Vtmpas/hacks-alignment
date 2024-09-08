@@ -10,6 +10,14 @@ import torch
 def configure_environment():
     """
     Context manager to set environment variables and configure torch backends.
+
+    This context manager disables memory-efficient and flash sparse dot product (SDP)
+    settings for torch CUDA backends and sets an environment variable to avoid
+    parallelism warnings from tokenizers. It yields control to the code block within
+    the context. After exiting the block, it restores the original settings.
+
+    Yields:
+        None
     """
     # Disable memory-efficient and flash SDP (Sparse Dot Product)
     torch.backends.cuda.enable_mem_efficient_sdp(False)
@@ -28,8 +36,14 @@ def configure_environment():
 
 
 def parse_arguments() -> argparse.Namespace:
+    """
+    Parses command-line arguments.
+
+    Returns:
+        argparse.Namespace: The parsed command-line arguments as a Namespace object.
+    """
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, required=True)
+    parser.add_argument("--config", type=str, required=True, help="Path to the configuration file.")
     return parser.parse_args()
 
 

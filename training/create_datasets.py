@@ -1,6 +1,5 @@
-# ruff: noqa
-import concurrent.futures
 import json
+import concurrent.futures
 import re
 from typing import Any, Dict, List, Optional, Union
 
@@ -15,8 +14,16 @@ ds = load_dataset("glaiveai/glaive-function-calling-v2")["train"].train_test_spl
 print(len(ds))
 
 
-# Function to extract queries from the text
-def extract_function_calls(text):
+def extract_function_calls(text: str) -> List[Dict[str, Any]]:
+    """
+    Extracts function calls from a given text based on specific patterns and converts them into a list of dictionaries.
+
+    Args:
+        text (str): The input text containing function calls in a specific format.
+
+    Returns:
+        List[Dict[str, Any]]: A list of dictionaries where each dictionary represents a function call with its name and arguments.
+    """
     pattern = re.compile(r"<functioncall>\s*({.*?})\s*<\|endoftext\|>", re.DOTALL)
     matches = pattern.findall(text)
     function_calls = []
@@ -34,7 +41,17 @@ def extract_function_calls(text):
     return function_calls
 
 
-def post_process_dialogue(dialogue, queries):
+def post_process_dialogue(dialogue: List[Dict[str, Any]], queries: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """
+    Post-processes a dialogue by updating commands with arguments based on extracted queries.
+
+    Args:
+        dialogue (List[Dict[str, Any]]): The original dialogue to be processed.
+        queries (List[Dict[str, Any]]): The list of extracted function calls and their arguments.
+
+    Returns:
+        List[Dict[str, Any]]: The processed dialogue with updated command arguments.
+    """
     processed_dialogue = []
     query_index = 0
     for message in dialogue:
@@ -48,63 +65,98 @@ def post_process_dialogue(dialogue, queries):
     return processed_dialogue
 
 
-# Define models
 class Thought(BaseModel):
+    """
+    Model for representing a thought with various attributes.
+
+    Attributes:
+        text (str): Summary of the thought in Russian.
+        reasoning (str): Explanation of reasoning in Russian.
+        plan (str): Plan of action in Russian.
+        criticism (str): Self-criticism in Russian.
+        speak (str): Summary to communicate to the user in Russian.
+    """
     text: str = Field(..., description="Summary of thought. In Russian")
     reasoning: str = Field(..., description="Explanation of reasoning. In Russian")
-    plan: str = Field(
-        ..., description="Plan of action - short bulleted\n- list that conveys\n- long-term plan. In Russian"
-    )
+    plan: str = Field(..., description="Plan of action - short bulleted list in Russian")
     criticism: str = Field(..., description="Self-criticism. In Russian")
     speak: str = Field(..., description="Summary to communicate to the user. In Russian")
 
 
 class Command(BaseModel):
+    """
+    Model for representing a command with a name and optional arguments.
+
+    Attributes:
+        name (str): Name of the command to execute.
+        args (Optional[Dict[str, Any]]): Arguments for the command.
+    """
     name: str = Field(..., description="Name of the command to execute. <functioncall>")
     args: Optional[Dict[str, Any]] = Field(None, description="Arguments for the command.")
 
 
 class FormattedResponse(BaseModel):
+    """
+    Model for representing a formatted response consisting of thoughts and a command.
+
+    Attributes:
+        thoughts (Thought): The thought process related to the response.
+        command (Command): The command to be executed as part of the response.
+    """
     thoughts: Thought
     command: Command
 
 
 class FullResponse(BaseModel):
+    """
+    Model for representing a full response in a dialogue, including role and content.
+
+    Attributes:
+        role (str): Role of the message sender (USER, ASSISTANT, or FUNCTION RESPONSE).
+        content (Union[str, FormattedResponse]): Content of the message, which can be a string or a FormattedResponse.
+    """
     role: str = Field(..., description="USER or ASSISTANT or FUNCTION RESPONSE")
     content: Union[str, FormattedResponse] = Field(
         ...,
-        description="If user translated in Russian str. If assistant then FormattedResponse translated in russian. Always use FormattedResponse for assistant even there is no function calling",
+        description="Content of the message, either a string for user or FormattedResponse for assistant."
     )
 
 
 class DialogueResponse(BaseModel):
+    """
+    Model for representing a dialogue consisting of multiple full responses.
+
+    Attributes:
+        dialogue (List[FullResponse]): The full dialogue as a list of responses.
+    """
     dialogue: List[FullResponse] = Field(..., description="Full dialogue according to schemas")
 
 
-# Initialize OpenAI client
 client = OpenAI(api_key="")
 
 
-def parse_to_list_of_dicts_general(text):
-    # Step 1: Replace single quotes with double quotes, except those in words
+def parse_to_list_of_dicts_general(text: str) -> List[Dict[str, Any]]:
+    """
+    Parses a given text into a list of dictionaries, handling common JSON formatting issues.
+
+    Args:
+        text (str): The input text to be parsed.
+
+    Returns:
+        List[Dict[str, Any]]: A list of dictionaries parsed from the text.
+    """
     text = re.sub(r"(?<!\\)'(?!s\b)(?=[^']*(?:'[^']*'[^']*)*$)", '"', text)
-
-    # Step 2: Remove backslashes before single quotes
     text = re.sub(r"\\(')", r"\1", text)
-
-    # Step 3: Escape double quotes within string values
     text = re.sub(
         r'(?<!\\)(")((?:.(?!(?<!\\)"))*.)(")', lambda m: m.group(1) + m.group(2).replace('"', '\\"') + m.group(3), text
     )
 
-    # Step 4: Add a comma between each JSON object if missing and wrap in a list
     if not text.strip().startswith("["):
         corrected_text = re.sub(r"\}\s*\{", "},{", text)
         corrected_text = f"[{corrected_text}]"
     else:
         corrected_text = text
 
-    # Step 5: Parse the corrected JSON text
     try:
         parsed_dicts = json.loads(corrected_text)
         if not isinstance(parsed_dicts, list):
@@ -112,7 +164,6 @@ def parse_to_list_of_dicts_general(text):
     except json.JSONDecodeError as e:
         print(f"JSON Decode Error: {e}")
         print(f"Problematic text: {corrected_text}")
-        # Attempt to fix common issues
         try:
             fixed_text = re.sub(r"([{,]\s*)(\w+)(\s*:)", r'\1"\2"\3', corrected_text)
             parsed_dicts = json.loads(fixed_text)
@@ -125,7 +176,16 @@ def parse_to_list_of_dicts_general(text):
     return parsed_dicts
 
 
-def convert_properties_to_args(parameters):
+def convert_properties_to_args(parameters: Dict[str, Any]) -> str:
+    """
+    Converts a dictionary of parameters into a string of arguments.
+
+    Args:
+        parameters (Dict[str, Any]): The dictionary containing parameter descriptions.
+
+    Returns:
+        str: A string representation of the arguments, based on the parameter descriptions.
+    """
     args = {}
     if not isinstance(parameters, dict):
         print(f"Warning: parameters is not a dictionary. Type: {type(parameters)}")
@@ -145,7 +205,16 @@ def convert_properties_to_args(parameters):
     return str(args).replace("{", "").replace("}", "")
 
 
-def translate_system(prompt):
+def translate_system(prompt: str) -> str:
+    """
+    Translates a system prompt into Russian using an OpenAI model.
+
+    Args:
+        prompt (str): The prompt text to be translated.
+
+    Returns:
+        str: The translated prompt text in Russian.
+    """
     splitted_prompt = prompt.split(" -\n")
     if len(splitted_prompt) == 1:
         return "Ты -- полезный помощник без дополнительных функций \n"
@@ -173,7 +242,16 @@ def translate_system(prompt):
     return translated_text
 
 
-def prepare_sample(example):
+def prepare_sample(example: Dict[str, Any]) -> Tuple[Optional[List[Dict[str, Any]]], bool]:
+    """
+    Prepares a sample by processing the chat and system prompts and extracting function calls.
+
+    Args:
+        example (Dict[str, Any]): The sample example containing chat and system prompts.
+
+    Returns:
+        Tuple[Optional[List[Dict[str, Any]]], bool]: A tuple where the first element is the processed dialogue or None, and the second element is a boolean indicating success.
+    """
     messages = [
         {
             "role": "system",
@@ -203,7 +281,16 @@ def prepare_sample(example):
         return None, False
 
 
-def process_dataset(dataset):
+def process_dataset(dataset: List[Dict[str, Any]]) -> List[List[Dict[str, Any]]]:
+    """
+    Processes a dataset by preparing samples and handling results with concurrency.
+
+    Args:
+        dataset (List[Dict[str, Any]]): The list of dataset examples to process.
+
+    Returns:
+        List[List[Dict[str, Any]]]: A list of processed results for each dataset example.
+    """
     successful_samples = 0
     failed_samples = 0
     results = []
@@ -226,20 +313,25 @@ def process_dataset(dataset):
     return results
 
 
-def create_jsonl_from_processed_results(processed_results, output_file="output.jsonl"):
-    # Open the output file in write mode
+def create_jsonl_from_processed_results(processed_results: List[List[Dict[str, Any]]], output_file: str = "output.jsonl") -> None:
+    """
+    Creates a JSONL file from processed results.
+
+    Args:
+        processed_results (List[List[Dict[str, Any]]]): The processed results to write to the JSONL file.
+        output_file (str): The name of the output JSONL file. Defaults to "output.jsonl".
+
+    Returns:
+        None
+    """
     with open(output_file, "w", encoding="utf-8") as f:
-        # Iterate over each result in processed_results
         for idx, result in enumerate(processed_results):
-            # Create a dictionary with the desired schema
             json_object = {"id": idx, "source": "example", "messages": []}
 
-            # Populate messages with role and content from the processed result
             for message in result:
-                role = message["role"].lower()  # Convert role to lowercase
+                role = message["role"].lower()
                 content = message["content"]
 
-                # Add the message to the messages list
                 json_object["messages"].append(
                     {
                         "role": role,
@@ -247,22 +339,32 @@ def create_jsonl_from_processed_results(processed_results, output_file="output.j
                     }
                 )
 
-            # Write the JSON object to the file as a JSONL line
             f.write(json.dumps(json_object, ensure_ascii=False) + "\n")
 
     print(f"JSONL file '{output_file}' has been created successfully.")
 
 
 def process_and_split_results(
-    processed_results, train_file="train.jsonl", test_file="test.jsonl", test_size=0.2, random_state=42
-):
+    processed_results: List[List[Dict[str, Any]]], 
+    train_file: str = "train.jsonl", 
+    test_file: str = "test.jsonl", 
+    test_size: float = 0.2, 
+    random_state: int = 42
+) -> None:
     """
-    Process processed_results, split them into train and test sets, and save them as JSONL files.
-    """
-    # Perform train-test split
-    train_data, test_data = train_test_split(processed_results, test_size=test_size, random_state=random_state)
+    Processes and splits results into training and testing sets, and saves them as JSONL files.
 
-    # Create JSONL files for training and testing datasets
+    Args:
+        processed_results (List[List[Dict[str, Any]]]): The processed results to split and save.
+        train_file (str): The file path for the training dataset. Defaults to "train.jsonl".
+        test_file (str): The file path for the testing dataset. Defaults to "test.jsonl".
+        test_size (float): The proportion of the dataset to include in the test split. Defaults to 0.2.
+        random_state (int): The seed used by the random number generator. Defaults to 42.
+
+    Returns:
+        None
+    """
+    train_data, test_data = train_test_split(processed_results, test_size=test_size, random_state=random_state)
     create_jsonl_from_processed_results(train_data, train_file)
     create_jsonl_from_processed_results(test_data, test_file)
 
